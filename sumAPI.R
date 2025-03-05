@@ -1,20 +1,24 @@
 library(plumber)
-library(readxl)
 
-#* @post /upload
-#* @param req The HTTP request containing file & path
-#* @response 200 Returns original file path
-function(req) {
-  # Extract file
-  file <- req$files$file
-  file_path <- req$body$file_path  # Extract original file path
+#* @apiTitle Simple Addition API
+#* @apiDescription This API adds two numbers.
 
-  if (is.null(file)) {
-    return(list(error = "No file uploaded"))
-  }
+#* Add two numbers using GET request
+#* @post /plus
+#* @param x:number First number
+#* @param y:number Second number
+function(x, y) {
+  x <- as.numeric(x)
+  y <- as.numeric(y)
+  return(list(result = x + y))
+}
 
-  return(list(
-    message = "File received",
-    original_path = file_path
-  ))
+#* Add two numbers using GET request
+#* @post /minus
+#* @param x:number First number
+#* @param y:number Second number
+function(x, y) {
+  x <- as.numeric(x)
+  y <- as.numeric(y)
+  return(list(result = x - y))
 }
