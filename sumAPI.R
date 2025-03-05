@@ -1,18 +1,20 @@
 library(plumber)
 library(readxl)
 
-# Define the API
+#* @post /upload
+#* @param req The HTTP request containing file & path
+#* @response 200 Returns original file path
+function(req) {
+  # Extract file
+  file <- req$files$file
+  file_path <- req$body$file_path  # Extract original file path
 
-#* @get /count_rows
-#* @param file_path The path to the Excel file
-#* @response 200 Returns the number of rows in the Excel file
-function(file_path) {
-  # Read the Excel file
-  data <- read_excel(file_path)
-  
-  # Count the number of rows in the first sheet
-  num_rows <- nrow(data)
-  
-  # Return the row count
-  return(num_rows)
+  if (is.null(file)) {
+    return(list(error = "No file uploaded"))
+  }
+
+  return(list(
+    message = "File received",
+    original_path = file_path
+  ))
 }
