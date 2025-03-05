@@ -5,7 +5,7 @@ FROM rocker/r-ver:latest
 RUN apt-get update && apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
 # Install R packages
-RUN R -e "install.packages(c('plumber'))"
+RUN R -e "install.packages(c('plumber','readxl'))"
 
 # Copy API files into the container
 COPY sumAPI.R /app/sumAPI.R
