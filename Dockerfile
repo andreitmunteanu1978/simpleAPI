@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y libcurl4-openssl-dev libssl-dev libxml2
 RUN R -e "install.packages(c('plumber'))"
 
 # Copy API files into the container
-COPY plumber.R /app/plumber.R
+COPY sumAPI.R /app/sumAPI.R
 WORKDIR /app
 
 # Expose the port
