@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y libcurl4-openssl-dev libssl-dev libxml2
 RUN R -e "install.packages(c('plumber','readxl'))"
 
 # Copy API files into the container
-COPY sumAPI.R /app/sumAPI.R
+COPY mathAPI.R /app/mathAPI.R
 WORKDIR /app
 
 # Expose the port
