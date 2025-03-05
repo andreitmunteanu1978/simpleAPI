@@ -1,12 +1,7 @@
 library(plumber)
 
-#* @apiTitle Simple API
-#* @apiDescription A free R Plumber API
-
-#* @get /hello
-function() {
-  list(message = "Hello, world!")
-}
+#* @apiTitle Sample Testing API
+#* @apiDescription A free data summation API
 
 #* @post /sum
 #* @param a numeric
