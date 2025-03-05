@@ -15,4 +15,4 @@ WORKDIR /app
 EXPOSE 8000
 
 # Start the Plumber API
-CMD ["R", "-e", "pr <- plumber::plumb('/app/plumber.R'); pr$run(host = '0.0.0.0', port = as.numeric(Sys.getenv('PORT', 8000)))"]
+CMD ["R", "-e", "pr <- plumber::plumb('/app/sumAPI.R'); pr$run(host = '0.0.0.0', port = as.numeric(Sys.getenv('PORT', 8000)))"]
