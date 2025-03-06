@@ -29,10 +29,14 @@ function(req) {
   # Import the data frame
   df <- data.frame(read_excel(temp_file))
 
-  # Retrieve parameters from request body
-  group_by_columns <- as.vector(unlist(fromJSON(rawToChar(req$body$group_by_columns$value))))
-  aggregation_columns <- as.vector(unlist(fromJSON(rawToChar(req$body$aggregation_columns$value))))
-  aggregation_method <- as.vector(unlist(fromJSON(rawToChar(req$body$aggregation_method$value))))
+  # Retrieve parameters from request body (OLD)
+  #group_by_columns <- as.vector(unlist(fromJSON(rawToChar(req$body$group_by_columns$value))))
+  #aggregation_columns <- as.vector(unlist(fromJSON(rawToChar(req$body$aggregation_columns$value))))
+  #aggregation_method <- as.vector(unlist(fromJSON(rawToChar(req$body$aggregation_method$value))))
+
+  group_by_columns <- as.vector(unlist(fromJSON(rawToChar(req$body$group_by_columns))))
+  aggregation_columns <- as.vector(unlist(fromJSON(rawToChar(req$body$aggregation_columns))))
+  aggregation_method <- as.vector(unlist(fromJSON(rawToChar(req$body$aggregation_method))))
   
   # Validate group_by_columns
   if (is.null(group_by_columns) || !all(group_by_columns %in% colnames(df))) {
