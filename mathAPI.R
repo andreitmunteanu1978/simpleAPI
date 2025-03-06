@@ -1,33 +1,34 @@
+# Load necessary libraries
 library(plumber)
-library(base64enc)
 library(readxl)
+library(dplyr)
 
-#* @apiTitle File Upload API
-#* @apiDescription This API uploads an attachment, decodes it, and reads the Excel file from memory.
-
-#* Upload file and count rows in the Excel sheet
-#* @post /upload
-#* @param req The HTTP request containing the file data
-#* @response 200 Returns the row count of the Excel file
+#* @post /upload_file
+#* @param file:file
+#* @serializer json
 function(req) {
-  # 1. Read the raw POST body (base64 encoded)
-  body <- rawToChar(req$postBody)
   
-  # 2. Decode the base64 content
-  decoded_data <- base64decode(body)
+  # Create variable to store the binary file data 
+  file_binary <- req$body$file$value
+
+  # Check if a file is uploaded
+  if (is.null(file_binary) || length(file_binary)==0) {
+    return(list(error = "No file uploaded"))
+  }
   
-  # 3. Create a raw connection to read the Excel file directly from memory
-  conn <- rawConnection(decoded_data)
+  # Create a temporary directory to store the file
+  temp_file <- tempfile(fileext = ".xlsx")
   
-  # 4. Read the Excel file from the raw connection
-  data <- read_excel(conn)
+  # Save the file
+  writeBin(file_binary, temp_file)
   
-  # 5. Close the connection
-  close(conn)
+  # Import the data frame
+  df <- read_excel(temp_file)
   
-  # 6. Count rows in the data
-  num_rows <- nrow(data)
+  # Delete the temporary file
+  unlink(temp_file)
   
-  # 7. Return the row count
-  return(list(row_count = num_rows))
+  # Return the results JSON
+  return(msg=paste("The imported data frame contains:  ", nrow(df)," rows.", sep = ""))
+
 }
