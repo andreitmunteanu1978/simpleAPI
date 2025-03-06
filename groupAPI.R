@@ -1,34 +1,25 @@
-# Load necessary libraries
-library(plumber)
+library(jsonlite)
 library(readxl)
-library(dplyr)
+library(base64enc)
 
 #* @post /upload_file
-#* @param file:file
-#* @serializer json
 function(req) {
+  # Parse JSON body
+  body <- fromJSON(rawToChar(req$postBody))
   
-  # Create variable to store the binary file data 
-  file_binary <- req$body$file$value
-
-  # Check if a file is uploaded
-  if (is.null(file_binary) || length(file_binary)==0) {
-    return(list(error = "No file uploaded"))
+  if (is.null(body$file$value)) {
+    return(list(message = "No file uploaded"))
   }
   
-  # Create a temporary directory to store the file
+  # Decode Base64 to raw binary
+  file_bin <- base64decode(body$file$value)
+  
+  # Save it to a temporary file
   temp_file <- tempfile(fileext = ".xlsx")
+  writeBin(file_bin, temp_file)
   
-  # Save the file
-  writeBin(file_binary, temp_file)
+  # Read the Excel file into a dataframe
+  data <- read_excel(temp_file)
   
-  # Import the data frame
-  df <- read_excel(temp_file)
-  
-  # Delete the temporary file
-  unlink(temp_file)
-  
-  # Return the results JSON
-  return(msg=paste("The imported data frame contains:  ", nrow(df)," rows.", sep = ""))
-
+  return(head(data))  # Return first few rows
 }
