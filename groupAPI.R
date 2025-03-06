@@ -3,11 +3,14 @@ library(plumber)
 library(readxl)
 library(dplyr)
 library(jsonlite)
+library(base64enc)
 
 #* @post /data
 #* @param File:file
 #* @serializer json
 function(req) {
+
+  print(req$body$file)
   
   # Create variable to store the binary file data 
   file_binary <- req$body$file$value
@@ -21,7 +24,7 @@ function(req) {
   temp_file <- tempfile(fileext = ".xlsx")
   
   # Save the file
-  writeBin(file_binary, temp_file)
+  writeBin(base64decode(file_binary), temp_file)
   
   # Import the data frame
   df <- data.frame(read_excel(temp_file))
