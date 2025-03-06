@@ -7,6 +7,8 @@ library(dplyr)
 #* @param file:file
 #* @serializer json
 function(req) {
+
+  print(req$body)
   
   # Create variable to store the binary file data 
   file_binary <- req$body$file$value
