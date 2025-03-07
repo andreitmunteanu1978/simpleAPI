@@ -29,7 +29,10 @@ function(req) {
   # Import the data frame
   df <- data.frame(read_excel(temp_file))
   print(nrow(df))
-  
+
+  print(req$body$group_by_columns)
+  print(rawToChar(req$body$group_by_columns))
+  print(fromJSON(rawToChar(req$body$group_by_columns)))
 
   # Retrieve parameters from request body
   group_by_columns <- as.vector(unlist(fromJSON(rawToChar(req$body$group_by_columns))))
