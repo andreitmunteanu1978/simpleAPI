@@ -78,7 +78,7 @@ function(req) {
   temp_file <- tempfile(fileext = ".xlsx")
   
   # Save the file
-  writeBin(file_binary, temp_file)
+  writeBin(base64decode(file_binary), temp_file)
   
   # Import the data frame
   df <- data.frame(read_excel(temp_file))
