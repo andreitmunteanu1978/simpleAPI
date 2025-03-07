@@ -11,7 +11,7 @@ library(base64enc)
 function(req) {
   
   # Create variable to store the binary file data 
-  file_binary <- req$body$file
+  file_binary <- req$body$File$value
   
   # Check if a file is uploaded
   if (is.null(file_binary) || length(file_binary)==0) {
@@ -22,7 +22,7 @@ function(req) {
   temp_file <- tempfile(fileext = ".xlsx")
   
   # Save the file
-  writeBin(base64decode(file_binary), temp_file)
+  writeBin(file_binary, temp_file)
   
   # Import the data frame
   df <- data.frame(read_excel(temp_file))
@@ -42,7 +42,7 @@ function(req) {
 function(req) {
   
   # Create variable to store the binary file data 
-  file_binary <- req$body$file
+  file_binary <- req$body$File$value
 
   # Check if a file is uploaded
   if (is.null(file_binary) || length(file_binary)==0) {
@@ -53,7 +53,7 @@ function(req) {
   temp_file <- tempfile(fileext = ".xlsx")
   
   # Save the file
-  writeBin(base64decode(file_binary), temp_file)
+  writeBin(file_binary, temp_file)
   
   # Import the data frame
   df <- data.frame(read_excel(temp_file))
