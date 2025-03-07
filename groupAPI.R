@@ -6,12 +6,14 @@ library(jsonlite)
 library(base64enc)
 
 #* @post /data
-#* @param File:file
+#* @param file:file
 #* @serializer json
 function(req) {
-  
+
+  print(req$body$file)
+
   # Create variable to store the binary file data 
-  file_binary <- req$body$File
+  file_binary <- req$body$file
 
   # Check if a file is uploaded
   if (is.null(file_binary) || length(file_binary)==0) {
@@ -61,13 +63,14 @@ function(req) {
 }
 
 #* @post /structure
-#* @param File:file
+#* @param file:file
 #* @serializer json
 function(req) {
 
-
+  print(req$body$file)
+  
   # Create variable to store the binary file data 
-  file_binary <- req$body$File
+  file_binary <- req$body$file
   
   # Check if a file is uploaded
   if (is.null(file_binary) || length(file_binary)==0) {
