@@ -28,6 +28,8 @@ function(req) {
   
   # Import the data frame
   df <- data.frame(read_excel(temp_file))
+  print(nrow(df))
+  
 
   # Retrieve parameters from request body
   group_by_columns <- as.vector(unlist(fromJSON(rawToChar(req$body$group_by_columns$value))))
@@ -62,6 +64,9 @@ function(req) {
 
 }
 
+
+
+
 #* @post /structure
 #* @param File:file
 #* @serializer json
@@ -85,6 +90,7 @@ function(req) {
   
   # Import the data frame
   df <- data.frame(read_excel(temp_file))
+  print(nrow(df))
 
   # Delete the temporary file
   unlink(temp_file)
