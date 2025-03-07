@@ -65,11 +65,9 @@ function(req) {
 #* @serializer json
 function(req) {
 
-  print(req$body$file)
-  print(req$body$File)
-  
+
   # Create variable to store the binary file data 
-  file_binary <- req$body$file$value
+  file_binary <- req$body$File
   
   # Check if a file is uploaded
   if (is.null(file_binary) || length(file_binary)==0) {
