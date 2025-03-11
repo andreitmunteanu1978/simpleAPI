@@ -10,8 +10,6 @@ library(base64enc)
 #* @serializer json
 function(req) {
 
-  print(req$body)
-
   # Create variable to store the binary file data 
   file_binary <- req$body$File
 
@@ -29,8 +27,6 @@ function(req) {
   # Import the data frame
   df <- data.frame(read_excel(temp_file))
 
-  print(as.vector(unlist(req$body$group_by_columns)))
-  
   # Retrieve parameters from request body
   group_by_columns <- as.vector(unlist(req$body$group_by_columns))
   aggregation_columns <- as.vector(unlist(req$body$aggregation_columns))
@@ -72,8 +68,6 @@ function(req) {
 #* @serializer json
 function(req) {
 
-  print(req$body$File)
-  
   # Create variable to store the binary file data 
   file_binary <- req$body$File
   
@@ -90,7 +84,6 @@ function(req) {
   
   # Import the data frame
   df <- data.frame(read_excel(temp_file))
-  print(nrow(df))
 
   # Delete the temporary file
   unlink(temp_file)
