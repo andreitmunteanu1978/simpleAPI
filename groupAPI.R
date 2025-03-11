@@ -5,7 +5,7 @@ library(dplyr)
 library(jsonlite)
 library(base64enc)
 
-#* @post /data
+#* @post ippa/data
 #* @param File:file
 #* @serializer json
 function(req) {
@@ -67,7 +67,7 @@ function(req) {
 
 
 
-#* @post /structure
+#* @post ippa/structure
 #* @param File:file
 #* @serializer json
 function(req) {
