@@ -5,11 +5,11 @@ library(dplyr)
 library(jsonlite)
 library(base64enc)
 
-#* @post ippa/data
+#* @post data
 #* @param File:file
 #* @serializer json
 function(req) {
-
+  
   # Create variable to store the binary file data 
   file_binary <- req$body$File
 
@@ -63,11 +63,12 @@ function(req) {
 
 
 
-#* @post ippa/structure
+#* @post structure
 #* @param File:file
 #* @serializer json
 function(req) {
 
+    print(file$body$category)
   # Create variable to store the binary file data 
   file_binary <- req$body$File
   
