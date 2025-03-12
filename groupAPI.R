@@ -49,9 +49,15 @@ function(req) {
   # Group the dataset
   DS1 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns)]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
   DS2 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"CUSTOMER")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+
+  DataList <- list(
+    list(Table="Customer/Date/Product", Data = DS1),
+    list(Table="Date/Product", Data = DS2)
+  )
   
   # Return the results JSON
-  return(list("Customer/Date/Product"=DS1,"Date/Product"=DS2))  
+  #return(list("data"Customer/Date/Product"=DS1,"Date/Product"=DS2))
+  return(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE))
 }
 
 #_______________________________________________________________
