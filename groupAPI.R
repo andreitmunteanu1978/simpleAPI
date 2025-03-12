@@ -57,7 +57,7 @@ function(req) {
   
   # Return the results JSON
   #return(list("data"Customer/Date/Product"=DS1,"Date/Product"=DS2))
-  return(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE))
+  return(DataList)
 }
 
 #_______________________________________________________________
