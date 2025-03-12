@@ -11,7 +11,11 @@ library(base64enc)
 function(req) {
   
   print(req$body$category)
+  print(as.Date(req$body$refdate))
 
+  # Define the reference date
+  refDate <- as.Date(req$body$refdate)
+  
   # Create variable to store the binary file data 
   file_binary <- req$body$File
 
@@ -38,7 +42,7 @@ function(req) {
   aggregation_columns <- c("QUANTITY")
   
   # Filter the data by latest +/- 10 days
-  df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(Sys.Date()+seq(-10,10)),]
+  df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(refDate+seq(-10,10)),]
   
   # Group the dataset
   response <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% aggregation_columns]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
