@@ -9,7 +9,8 @@ library(base64enc)
 #* @param File:file
 #* @serializer json
 function(req) {
-  print(file$body$category)
+  
+  print(req$body$category)
 
   # Create variable to store the binary file data 
   file_binary <- req$body$File
