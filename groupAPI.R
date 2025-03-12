@@ -9,6 +9,49 @@ library(base64enc)
 #* @param File:file
 #* @serializer json
 function(req) {
+  print(file$body$category)
+
+  # Create variable to store the binary file data 
+  file_binary <- req$body$File
+
+  # Check if a file is uploaded
+  if (is.null(file_binary) || length(file_binary)==0) {
+    return(list(error = "No file uploaded"))
+  }
+  
+  # Create a temporary directory to store the file
+  temp_file <- tempfile(fileext = ".xlsx")
+  
+  # Save the file
+  writeBin(base64decode(file_binary), temp_file)
+  
+  # Import the data frame
+  df <- data.frame(read_excel(temp_file))
+  
+  # Delete the temporary file
+  unlink(temp_file)
+
+  # Select the grouping columns
+  df <- df[,colnames(df) %in% c("Name.of.the.ship.to.party","Deliv..date.From.to.","Description","Delivery.quantity")]
+  colnames(df) <- c("CUSTOMER","DATE","PRODUCT","QUANTITY")
+  aggregation_columns <- c("QUANTITY")
+  
+  # Filter the data by latest +/- 10 days
+  df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(Sys.Date()+seq(-10,10)),]
+  
+  # Group the dataset
+  response <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% aggregation_columns]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+
+  # Return the results JSON
+  return(response)  
+}
+
+#_______________________________________________________________
+
+#* @post dataold
+#* @param File:file
+#* @serializer json
+function(req) {
   
   # Create variable to store the binary file data 
   file_binary <- req$body$File
@@ -60,15 +103,15 @@ function(req) {
 
 }
 
+#_______________________________________________________________
 
-
-
-#* @post structure
+#* @post schema
 #* @param File:file
 #* @serializer json
 function(req) {
 
-    print(file$body$category)
+  print(file$body$category)
+  
   # Create variable to store the binary file data 
   file_binary <- req$body$File
   
