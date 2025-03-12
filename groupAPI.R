@@ -42,13 +42,16 @@ function(req) {
   aggregation_columns <- c("QUANTITY")
   
   # Filter the data by latest +/- 10 days
-  df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(refDate+seq(-10,10)),]
+  df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(refDate+seq(-5,5)),]
   
   # Group the dataset
-  response <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% aggregation_columns]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
-
+  #response <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% aggregation_columns]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+  # Group the dataset
+  DS1 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns)]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+  DS2 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"CUSTOMER")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+  
   # Return the results JSON
-  return(response)  
+  return(list("A"=DS1,"B"=DS2))  
 }
 
 #_______________________________________________________________
