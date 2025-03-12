@@ -51,7 +51,7 @@ function(req) {
   DS2 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"CUSTOMER")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
   
   # Return the results JSON
-  return(list("A"=DS1,"B"=DS2))  
+  return(list("Customer/Date/Product"=DS1,"Date/Product"=DS2))  
 }
 
 #_______________________________________________________________
