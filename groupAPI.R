@@ -53,9 +53,12 @@ function(req) {
   DS1 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns)]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
   DS2 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"CUSTOMER")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
 
+  # Define the array of group_by_columns
+  group_by_colums <- colnames(df)[!colnames(df) %in% aggregation_columns]
+  
   DataList <- list(
-    list(Table="Customer/Date/Product", Data = DS1, Format = sapply(DS1, class)),
-    list(Table="Date/Product", Data = DS2, Format = sapply(DS2, class))
+    list(Table="Customer/Date/Product", Data = DS1, Groups = group_by_colums),
+    list(Table="Date/Product", Data = DS2, Groups = group_by_colums)
   )
   
   # Return the results JSON
