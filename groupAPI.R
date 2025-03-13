@@ -58,7 +58,7 @@ function(req) {
   print(file_category)
   
   switch(file_category,
-         "IPPA", f_ippa(file_binary)
+         "IPPA", f_ippa(temp_file)
         )
   }
 
