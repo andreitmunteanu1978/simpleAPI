@@ -6,7 +6,11 @@ library(jsonlite)
 library(base64enc)
 
 # Define the function for processing IPPA
-f_ippa <- function(temp_file) {
+f_ippa <- function(temp_location) {
+
+  temp_file <- tempfile(fileext = ".xlsx")
+  
+  writeBin(base64decode(temp_location), temp_file)
   
   df <- data.frame(read_excel(temp_file))
   
