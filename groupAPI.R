@@ -5,72 +5,7 @@ library(dplyr)
 library(jsonlite)
 library(base64enc)
 
-# Define the function for processing IPPA
-f_ippa <- function(data_frame, temp_date) {
-  
-  df <- data_frame
-  
-  df <- df[,colnames(df) %in% c("Name.of.the.ship.to.party","Deliv..date.From.to.","Description","Delivery.quantity")]
-  colnames(df) <- c("CUSTOMER","DATE","PRODUCT","QUANTITY")
-  aggregation_columns <- c("QUANTITY")
-
-  df$DATE <- as.Date(df$DATE)
-  
-  df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(temp_date+seq(-5,5)),]
-  
-  DS1 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns)]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
-  DS2 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"CUSTOMER")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
-
-  group_by_colums <- colnames(df)[!colnames(df) %in% aggregation_columns]
-  
-  DataList <- list(
-    list(Table="Customer/Date/Product", Data = DS1, Groups = group_by_colums),
-    list(Table="Date/Product", Data = DS2, Groups = group_by_colums)
-  )
-  
-  return(fromJSON(toJSON(DataList,pretty=TRUE, auto_unbox = TRUE)))
-}
-
 #* @post data
-#* @param File:file
-#* @serializer json
-function(req) {
-  # Define the file category
-  file_category <- req$body$category
-  
-  # Define the reference date
-  refDate <- as.Date(req$body$refdate)
-  
-  # Create variable to store the binary file data 
-  file_binary <- req$body$File
-
-  # Check if a file is uploaded
-  if (is.null(file_binary) || length(file_binary)==0) {
-    return(list(error = "No file uploaded"))
-  }
-  
-  # Create a temporary directory to store the file
-  temp_file <- tempfile(fileext = ".xlsx")
-  
-  # Save the file
-  writeBin(base64decode(file_binary), temp_file)
-
-  # Import the data frame
-  temp_data <- data.frame(read_excel(temp_file))
-  
-  # Delete the temporary file
-  unlink(temp_file)
-  
-  print(file_category)
-  
-  switch(file_category,
-         "IPPA", f_ippa(temp_data, refDate)
-        )
-  }
-
-#_______________________________________________________________
-
-#* @post datas
 #* @param File:file
 #* @serializer json
 function(req) {
