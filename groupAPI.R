@@ -5,6 +5,10 @@ library(dplyr)
 library(jsonlite)
 library(base64enc)
 
+f_ippa <- function(data_list) {
+  print(length(data_list))
+  }
+
 #* @post data
 #* @param File:file
 #* @serializer json
@@ -62,7 +66,11 @@ function(req) {
   )
   
   # Return the results JSON
-  return(fromJSON(toJSON(DataList,pretty=TRUE, auto_unbox = TRUE)))
+  #return(fromJSON(toJSON(DataList,pretty=TRUE, auto_unbox = TRUE)))
+
+  switch(file_category,
+         "IPPA" = f_ippa(DataList)
+         )
 }
 
 #_______________________________________________________________
