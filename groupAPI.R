@@ -7,10 +7,6 @@ library(base64enc)
 
 # Define the function for processing IPPA
 f_ippa <- function(temp_location) {
-
-  temp_file <- tempfile(fileext = ".xlsx")
-  
-  writeBin(base64decode(temp_location), temp_file)
   
   df <- data.frame(read_excel(temp_file))
   
@@ -53,6 +49,12 @@ function(req) {
     return(list(error = "No file uploaded"))
   }
 
+  # Create a temporary directory to store the file
+  temp_file <- tempfile(fileext = ".xlsx")
+  
+  # Save the file
+  writeBin(base64decode(file_binary), temp_file)
+  
   print(file_category)
   
   switch(file_category,
