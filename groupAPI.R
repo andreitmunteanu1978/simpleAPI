@@ -49,10 +49,8 @@ function(req) {
     return(list(error = "No file uploaded"))
   }
 
-  switch(file_category,
-         "IPPA" = f_ippa(file_binary)
-         )
-
+  return(file_category)
+  
   }
 
 
