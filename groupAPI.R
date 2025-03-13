@@ -6,9 +6,9 @@ library(jsonlite)
 library(base64enc)
 
 # Define the function for processing IPPA
-f_ippa <- function(temp_location, temp_date) {
+f_ippa <- function(data_frame, temp_date) {
   
-  df <- data.frame(read_excel(temp_location))
+  df <- data_frame
   
   df <- df[,colnames(df) %in% c("Name.of.the.ship.to.party","Deliv..date.From.to.","Description","Delivery.quantity")]
   colnames(df) <- c("CUSTOMER","DATE","PRODUCT","QUANTITY")
@@ -54,11 +54,17 @@ function(req) {
   
   # Save the file
   writeBin(base64decode(file_binary), temp_file)
+
+  # Import the data frame
+  temp_data <- data.frame(read_excel(temp_file))
+  
+  # Delete the temporary file
+  unlink(temp_file)
   
   print(file_category)
   
   switch(file_category,
-         "IPPA", f_ippa(temp_file,refDate)
+         "IPPA", f_ippa(temp_data, refDate)
         )
   }
 
