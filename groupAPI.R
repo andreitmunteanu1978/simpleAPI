@@ -51,8 +51,8 @@ function(req) {
   DS2 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"CUSTOMER")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
 
   DataList <- list(
-    list(Table="Customer/Date/Product", Data = DS1, Formats = as.list(sapply(DS1,class))),
-    list(Table="Date/Product", Data = DS2, Formats = as.list(sapply(DS1,class))))
+    list(Table="Customer/Date/Product", Data = DS1),
+    list(Table="Date/Product", Data = DS2)
   )
   
   # Return the results JSON
