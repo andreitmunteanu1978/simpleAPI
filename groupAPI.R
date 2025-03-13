@@ -8,7 +8,7 @@ library(base64enc)
 # Define the function for processing IPPA
 f_ippa <- function(temp_location, temp_date) {
   
-  df <- data.frame(read_excel(temp_file))
+  df <- data.frame(read_excel(temp_location))
   
   df <- df[,colnames(df) %in% c("Name.of.the.ship.to.party","Deliv..date.From.to.","Description","Delivery.quantity")]
   colnames(df) <- c("CUSTOMER","DATE","PRODUCT","QUANTITY")
