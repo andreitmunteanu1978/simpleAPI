@@ -6,7 +6,7 @@ library(jsonlite)
 library(base64enc)
 
 # Define the function for processing IPPA
-f_ippa <- function(temp_location) {
+f_ippa <- function(temp_location, temp_date) {
   
   df <- data.frame(read_excel(temp_file))
   
@@ -16,7 +16,7 @@ f_ippa <- function(temp_location) {
 
   df$DATE <- as.Date(df$DATE)
   
-  df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(refDate+seq(-5,5)),]
+  df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(temp_date+seq(-5,5)),]
   
   DS1 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns)]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
   DS2 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"CUSTOMER")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
@@ -58,7 +58,7 @@ function(req) {
   print(file_category)
   
   switch(file_category,
-         "IPPA", f_ippa(temp_file)
+         "IPPA", f_ippa(temp_file,refDate)
         )
   }
 
