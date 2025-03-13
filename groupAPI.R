@@ -5,7 +5,7 @@ library(dplyr)
 library(jsonlite)
 library(base64enc)
 
-f_ippa <- function(binary_file) {
+f_ippa <- function(binary_file, date) {
   
   # Create a temporary directory to store the file
   temp_file <- tempfile(fileext = ".xlsx")
@@ -28,7 +28,7 @@ f_ippa <- function(binary_file) {
   df$DATE <- as.Date(df$DATE)
   
   # Filter the data by latest +/- 10 days
-  df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(refDate+seq(-5,5)),]
+  df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(date+seq(-5,5)),]
   
   # Group the dataset
   #response <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% aggregation_columns]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
@@ -68,7 +68,7 @@ function(req) {
   }
   
   switch(file_category,
-         "IPPA" = f_ippa(file_binary)
+         "IPPA" = f_ippa(file_binary, refDate)
          )
 }
 
