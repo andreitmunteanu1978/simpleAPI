@@ -40,6 +40,9 @@ function(req) {
   df <- df[,colnames(df) %in% c("Name.of.the.ship.to.party","Deliv..date.From.to.","Description","Delivery.quantity")]
   colnames(df) <- c("CUSTOMER","DATE","PRODUCT","QUANTITY")
   aggregation_columns <- c("QUANTITY")
+
+  # Format the 'DATE' column
+  df$DATE <- as.Date(df$DATE)
   
   # Filter the data by latest +/- 10 days
   df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(refDate+seq(-5,5)),]
