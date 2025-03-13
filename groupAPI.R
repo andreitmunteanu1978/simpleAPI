@@ -48,7 +48,7 @@ function(req) {
   if (is.null(file_binary) || length(file_binary)==0) {
     return(list(error = "No file uploaded"))
   }
-
+  
   # Create a temporary directory to store the file
   temp_file <- tempfile(fileext = ".xlsx")
   
@@ -70,7 +70,7 @@ function(req) {
 function(req) {
   
   # Define the file category
-  file_category <- ref$body$category
+  file_category <- req$body$category
   
   # Define the reference date
   refDate <- as.Date(req$body$refdate)
