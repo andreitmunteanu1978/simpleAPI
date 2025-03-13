@@ -36,7 +36,7 @@ f_ippa <- function(temp_file) {
 #* @serializer json
 function(req) {
   # Define the file category
-  file_category <- ref$body$category
+  file_category <- req$body$category
   
   # Define the reference date
   refDate <- as.Date(req$body$refdate)
@@ -49,10 +49,14 @@ function(req) {
     return(list(error = "No file uploaded"))
   }
 
-  return(file_category)
+  print(file_category)
   
+  switch(file_category,
+         "IPPA", f_ippa(file_binary)
+        )
   }
 
+#_______________________________________________________________
 
 #* @post datas
 #* @param File:file
