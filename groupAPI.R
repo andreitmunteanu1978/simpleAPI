@@ -5,28 +5,7 @@ library(dplyr)
 library(jsonlite)
 library(base64enc)
 
-f_ippa <- function(data_list) {
-  print(length(data_list))
-  }
-
-#* @post data
-#* @param File:file
-#* @serializer json
-function(req) {
-  
-  # Define the file category
-  file_category <- req$body$category
-  
-  # Define the reference date
-  refDate <- as.Date(req$body$refdate)
-  
-  # Create variable to store the binary file data 
-  file_binary <- req$body$File
-
-  # Check if a file is uploaded
-  if (is.null(file_binary) || length(file_binary)==0) {
-    return(list(error = "No file uploaded"))
-  }
+f_ippa <- function(binary_file) {
   
   # Create a temporary directory to store the file
   temp_file <- tempfile(fileext = ".xlsx")
@@ -66,10 +45,30 @@ function(req) {
   )
   
   # Return the results JSON
-  #return(fromJSON(toJSON(DataList,pretty=TRUE, auto_unbox = TRUE)))
+  return(fromJSON(toJSON(DataList,pretty=TRUE, auto_unbox = TRUE)))
+  }
 
+#* @post data
+#* @param File:file
+#* @serializer json
+function(req) {
+  
+  # Define the file category
+  file_category <- req$body$category
+  
+  # Define the reference date
+  refDate <- as.Date(req$body$refdate)
+  
+  # Create variable to store the binary file data 
+  file_binary <- req$body$File
+
+  # Check if a file is uploaded
+  if (is.null(file_binary) || length(file_binary)==0) {
+    return(list(error = "No file uploaded"))
+  }
+  
   switch(file_category,
-         "IPPA" = f_ippa(DataList)
+         "IPPA" = f_ippa(file_binary)
          )
 }
 
