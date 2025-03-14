@@ -93,7 +93,7 @@ function(req) {
   }
   
   #3. Define the reference range
-  refRange <- as.Date(req$body$refRange)
+  refRange <- as.numeric(req$body$refRange)
   
   if (is.null(refRange) || length(refRange)==0) {
     return(list(error = "You have not choosen a valid reference range for your reference date."))
