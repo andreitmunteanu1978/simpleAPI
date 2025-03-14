@@ -57,7 +57,47 @@ library(base64enc)
   }
   
   # Declare the function for processing the JET.xlsx file
-  f_jet <- NULL
+  f_jet <- function(bin_file, ref_date, ref_range) {
+    
+    # Create a temporary directory to store the file
+    temp_file <- tempfile(fileext = ".xlsx")
+    
+    # Save the file
+    writeBin(base64decode(bin_file), temp_file)
+    
+    # Import the Excel data into a data.frame
+    df <- data.frame(read_excel(temp_file))
+    
+    # Delete the temporary file
+    unlink(temp_file)
+    
+    # Select the grouping columns
+    df <- df[,colnames(df) %in% c("Name.of.the.ship.to.party","Deliv..date.From.to.","Description","Delivery.quantity")]
+    colnames(df) <- c("CUSTOMER","DATE","PRODUCT","QUANTITY")
+    aggregation_columns <- c("QUANTITY")
+    
+    # Format the 'DATE' column using the as.Date formula
+    df$DATE <- as.Date(df$DATE)
+    
+    # Filter the data by latest +/- 10 days
+    df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(ref_date+seq(-ref_range,ref_range)),]
+    
+    # Create 2 response data.frames
+    df_1 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns)]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+    df_2 <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns, "CUSTOMER")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+    
+    # Define the array of group_by_columns
+    group_by_colums <- colnames(df)[!colnames(df) %in% aggregation_columns]
+    
+    # Store the data.frames into a list
+    DataList <- list(
+      list(Table="Customer/Date/Product", Data = df_1, Groups = group_by_colums),
+      list(Table="Date/Product", Data = df_2, Groups = group_by_colums)
+    )
+    
+    # Return the results JSON
+    return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
+  }
   
   # Declare the function for processing the Program vag si vapoare.xlsx file
   f_shipments_trains_barges <- NULL
