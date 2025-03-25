@@ -190,13 +190,11 @@ library(base64enc)
     unlink(temp_file)
 
     DataList <- list(Response = "Success",
-      Info = list(
-      list()
-        )
+      Info = list()
     )
 
     # Return the results JSON
-    return(fromJSON(toJSON(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)), pretty = TRUE, auto_unbox = TRUE)))
+    return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
   }
 
 #_______________________________________________________________
