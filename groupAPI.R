@@ -148,12 +148,12 @@ function(req) {
   }
   
   switch(file_category,
-         "Shipments and Depots" = f_shipments_depots(file_binary, refDate, refRange),
-         "Shipments to Vega" = f_shipments_vega(file_binary, refDate, refRange),
+         "Shipments_Depots" = f_shipments_depots(file_binary, refDate, refRange),
+         "Shipments_Vega" = f_shipments_vega(file_binary, refDate, refRange),
          "IPPA" = f_ippa(file_binary, refDate, refRange),
          "Jet" = f_jet(file_binary, refDate, refRange),
-         "Trains and Barges" = f_shipments_trains_barges(file_binary, refDate, refRange),
-         "Shipments and Others" = f_shipments_others(file_binary, refDate, refRange),
+         "Trains_Barges" = f_shipments_trains_barges(file_binary, refDate, refRange),
+         "Shipments_Others" = f_shipments_others(file_binary, refDate, refRange),
          "Stocks" = f_stocks(file_binary, refDate, refRange),
   )
 }
