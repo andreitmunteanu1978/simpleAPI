@@ -23,8 +23,8 @@ library(base64enc)
     unlink(temp_file)
 
     # Store the data.frames into a list
-    DataList <- list(
-      list(Table="NA", Data = "NA", Groups = "NA")
+    DataList <- list(Response = "Success",
+      Info = list()
     )
 
     # Return the results JSON
@@ -47,7 +47,13 @@ library(base64enc)
     # Delete the temporary file
     unlink(temp_file)
 
-    return(list(response = paste("You have selected to process the ", category_file, " file!", sep = "")))
+    # Store the data.frames into a list
+    DataList <- list(Response = "Success",
+      Info = list()
+    )
+
+    # Return the results JSON
+    return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
   }
   
   # Declare function for processing the IPPA.xlsx file
@@ -129,9 +135,11 @@ library(base64enc)
     group_by_colums <- colnames(df)[!colnames(df) %in% aggregation_columns]
     
     # Store the data.frames into a list
-    DataList <- list(
-      list(Table="Customer/Date/Product", Data = df_1, Groups = group_by_colums),
-      list(Table="Date/Product", Data = df_2, Groups = group_by_colums)
+    DataList <- list(Response = "Success",
+      Info = list(
+        list(Table="Customer/Date/Product", Data = df_1, Groups = group_by_colums),
+        list(Table="Date/Product", Data = df_2, Groups = group_by_colums)
+        )
     )
     
     # Return the results JSON
@@ -153,7 +161,13 @@ library(base64enc)
     # Delete the temporary file
     unlink(temp_file)
 
-    return(list(response = paste("You have selected to process the ", category_file, " file!", sep = "")))
+    # Store the data.frames into a list
+    DataList <- list(Response = "Success",
+      Info = list()
+    )
+
+    # Return the results JSON
+    return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
   }
   
   # Declare the function for processing the LIVRARI.xlsx file
@@ -171,7 +185,12 @@ library(base64enc)
     # Delete the temporary file
     unlink(temp_file)
 
-    return(list(response = paste("You have selected to process the ", category_file, " file!", sep = "")))
+    DataList <- list(Response = "Success",
+      Info = list()
+    )
+
+    # Return the results JSON
+    return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
   }
   
   # Declare the function for processing the Stoc.xlsx file
@@ -189,6 +208,7 @@ library(base64enc)
     # Delete the temporary file
     unlink(temp_file)
 
+    # Store the data.frames into a list
     DataList <- list(Response = "Success",
       Info = list()
     )
