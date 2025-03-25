@@ -8,10 +8,41 @@ library(base64enc)
 # Create all applicable functions for the API POST action
   
   # Declare the function for processing the Livrari Depozite.xlsx file
-  f_shipments_depots <- NULL
+  f_shipments_depots <- function(bin_file, ref_date, ref_range, category_file) {
+    
+    # Create a temporary directory to store the file
+    temp_file <- tempfile(fileext = ".xlsx")
+    
+    # Save the file
+    writeBin(base64decode(bin_file), temp_file)
+    
+    # Import the Excel data into a data.frame
+    df <- data.frame(read_excel(temp_file))
+    
+    # Delete the temporary file
+    unlink(temp_file)
+
+    return(list(response = paste("You have selected to process the ", category_file, " file!", sep = "")))
+  }
+    
   
   # Declare the function for processing the Avize Transfer VEGA.xlsx file
-  f_shipments_vega <- NULL
+  f_shipments_vega <- function(bin_file, ref_date, ref_range, category_file) {
+    
+    # Create a temporary directory to store the file
+    temp_file <- tempfile(fileext = ".xlsx")
+    
+    # Save the file
+    writeBin(base64decode(bin_file), temp_file)
+    
+    # Import the Excel data into a data.frame
+    df <- data.frame(read_excel(temp_file))
+    
+    # Delete the temporary file
+    unlink(temp_file)
+
+    return(list(response = paste("You have selected to process the ", category_file, " file!", sep = "")))
+  }
   
   # Declare function for processing the IPPA.xlsx file
   f_ippa <- function(bin_file, ref_date, ref_range) {
@@ -100,13 +131,58 @@ library(base64enc)
   }
   
   # Declare the function for processing the Program vag si vapoare.xlsx file
-  f_shipments_trains_barges <- NULL
+  f_trains_barges <- function(bin_file, ref_date, ref_range, category_file) {
+    
+    # Create a temporary directory to store the file
+    temp_file <- tempfile(fileext = ".xlsx")
+    
+    # Save the file
+    writeBin(base64decode(bin_file), temp_file)
+    
+    # Import the Excel data into a data.frame
+    df <- data.frame(read_excel(temp_file))
+    
+    # Delete the temporary file
+    unlink(temp_file)
+
+    return(list(response = paste("You have selected to process the ", category_file, " file!", sep = "")))
+  }
   
   # Declare the function for processing the LIVRARI.xlsx file
-  f_shipments_others <- NULL
+  f_shipments_others <- function(bin_file, ref_date, ref_range, category_file) {
+    
+    # Create a temporary directory to store the file
+    temp_file <- tempfile(fileext = ".xlsx")
+    
+    # Save the file
+    writeBin(base64decode(bin_file), temp_file)
+    
+    # Import the Excel data into a data.frame
+    df <- data.frame(read_excel(temp_file))
+    
+    # Delete the temporary file
+    unlink(temp_file)
+
+    return(list(response = paste("You have selected to process the ", category_file, " file!", sep = "")))
+  }
   
   # Declare the function for processing the Stoc.xlsx file
-  f_stocks <- NULL
+  f_stocks <- function(bin_file, ref_date, ref_range, category_file) {
+    
+    # Create a temporary directory to store the file
+    temp_file <- tempfile(fileext = ".xlsx")
+    
+    # Save the file
+    writeBin(base64decode(bin_file), temp_file)
+    
+    # Import the Excel data into a data.frame
+    df <- data.frame(read_excel(temp_file))
+    
+    # Delete the temporary file
+    unlink(temp_file)
+
+    return(list(response = paste("You have selected to process the ", category_file, " file!", sep = "")))
+  }
 
 #_______________________________________________________________
   
@@ -148,13 +224,13 @@ function(req) {
   }
   
   switch(file_category,
-         "Shipments_Depots" = f_shipments_depots(file_binary, refDate, refRange),
-         "Shipments_Vega" = f_shipments_vega(file_binary, refDate, refRange),
+         "Shipments_Depots" = f_shipments_depots(file_binary, refDate, refRange, file_category),
+         "Shipments_Vega" = f_shipments_vega(file_binary, refDate, refRange, file_category),
          "IPPA" = f_ippa(file_binary, refDate, refRange),
          "Jet" = f_jet(file_binary, refDate, refRange),
-         "Trains_Barges" = f_shipments_trains_barges(file_binary, refDate, refRange),
-         "Shipments_Others" = f_shipments_others(file_binary, refDate, refRange),
-         "Stocks" = f_stocks(file_binary, refDate, refRange),
+         "Trains_Barges" = f_trains_barges(file_binary, refDate, refRange, file_category),
+         "Shipments_Others" = f_shipments_others(file_binary, refDate, refRange, file_category),
+         "Stocks" = f_stocks(file_binary, refDate, refRange, file_category),
   )
 }
 
