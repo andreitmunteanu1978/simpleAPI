@@ -24,7 +24,7 @@ library(base64enc)
 
     # Store the data.frames into a list
     DataList <- list(
-      list(Table="NA", Data = ="NA", Groups = ="NA")
+      list(Table="NA", Data = "NA", Groups = "NA")
     )
 
     # Return the results JSON
