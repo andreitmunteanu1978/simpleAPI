@@ -84,9 +84,11 @@ library(base64enc)
     group_by_colums <- colnames(df)[!colnames(df) %in% aggregation_columns]
     
     # Store the data.frames into a list
-    DataList <- list(
+    DataList <- list(Response = "Success",
+      Info = list(
       list(Table="Customer/Date/Product", Data = df_1, Groups = group_by_colums),
       list(Table="Date/Product", Data = df_2, Groups = group_by_colums)
+        )
     )
     
     # Return the results JSON
@@ -187,7 +189,14 @@ library(base64enc)
     # Delete the temporary file
     unlink(temp_file)
 
-    return(list(response = paste("You have selected to process the ", category_file, " file!", sep = "")))
+    DataList <- list(Response = "Success",
+      Info = list(
+      list()
+        )
+    )
+
+    # Return the results JSON
+    return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
   }
 
 #_______________________________________________________________
