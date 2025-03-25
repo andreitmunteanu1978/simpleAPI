@@ -196,7 +196,7 @@ library(base64enc)
     )
 
     # Return the results JSON
-    return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
+    return(fromJSON(toJSON(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)), pretty = TRUE, auto_unbox = TRUE)))
   }
 
 #_______________________________________________________________
