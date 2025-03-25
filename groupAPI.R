@@ -22,7 +22,13 @@ library(base64enc)
     # Delete the temporary file
     unlink(temp_file)
 
-    return(list(response = paste("You have selected to process the ", category_file, " file!", sep = "")))
+    # Store the data.frames into a list
+    DataList <- list(
+      list(Table="NA", Data = ="NA", Groups = ="NA")
+    )
+
+    # Return the results JSON
+    return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
   }
     
   
