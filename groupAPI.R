@@ -56,9 +56,9 @@ library(base64enc)
     df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(ref_date+seq(-ref_range,ref_range)),]
     
     # Create 3 response data.frames
-    df_DWS <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
-    df_OMV <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns, "ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
-    df_SOCAR <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns, "ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+    df_DWS <- df[df$ENTITY=="DWS",] %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+    df_OMV <- df[df$ENTITY=="OMV",] %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns, "ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+    df_SOCAR <- df[df$ENTITY=="SOCAR",] %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns, "ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
     
     # Define the array of group_by_columns
     group_by_colums <- colnames(df)[!colnames(df) %in% c(aggregation_columns,"ENTITY")]
