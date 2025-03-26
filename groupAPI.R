@@ -78,7 +78,8 @@ library(base64enc)
     print(length(DataList))
     
     # Return the results JSON
-    return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
+    # return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
+    return(category_file, length(DataList))
   }
     
   
