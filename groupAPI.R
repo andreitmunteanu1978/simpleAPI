@@ -15,16 +15,58 @@ library(base64enc)
     
     # Save the file
     writeBin(base64decode(bin_file), temp_file)
+
+    # Declare the relevant Excel sheets
+    sheets <- excel_sheets(filepath)
+    sheets <- sheets[grepl("dws",tolower(sheets)) & grepl("-",tolower(sheets)) | grepl("omv",tolower(sheets)) | grepl("socar",tolower(sheets))]
+
+    # Define a list to store the data frames
+    df_list <- vector(mode = "list", length = 3)
+    names(df_list) <- c("DWS","OMV","SOCAR")
     
     # Import the Excel data into a data.frame
-    df <- data.frame(read_excel(temp_file))
+    for (d in names(df_list))
+    {
+      df_temp <- cbind("ENTITY"=d, data.frame(read_excel(filepath, sheet = sheets[grepl(tolower(d), tolower(sheets))])))
+      df_temp <- df_temp[!is.na(df_temp$Data.expedierii),colnames(df_temp) %in% c("ENTITY","Data.expedierii","Produs","Cantitate.expediata.tone")]
+      
+      colnames(df_temp) <- c("ENTITY","DATE","PRODUCT","QUANTITY")
+      
+      df_temp <- df_temp[tolower(df_temp$PRODUCT)!="produs",]
+      if(as.numeric(df_temp$DATE[1])>60000)
+      {
+        df_temp$DATE <- as.Date(df_temp$DATE)
+      } else
+      {
+        df_temp$DATE <- as.Date(as.numeric(df_temp$DATE), origin="1899-12-30")
+      }
+      
+      df_temp$QUANTITY <- as.numeric(df_temp$QUANTITY)
+      df_list[[d]] <- df_temp
+    }
     
     # Delete the temporary file
     unlink(temp_file)
 
-    # Store the data.frames into a list
-    DataList <- list(Response = "Success",
-      Info = list()
+    # Create the composite data.frame
+    df <- do.call(rbind, df_list)
+    aggregation_columns <- c("QUANTITY")
+    
+    # Filter the data by latest +/- 10 days
+    df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(ref_date+seq(-ref_range,ref_range)),]
+    
+    # Create 3 response data.frames
+    df_DWS <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+    df_OMV <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns, "ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+    df_SOCAR <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns, "ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+    
+    # Define the array of group_by_columns
+    group_by_colums <- colnames(df)[!colnames(df) %in% c(aggregation_columns,"ENTITY")]
+    
+    DataList <- list(
+      list(Name="DWS", Data = df_DWS),
+      list(Name="OMV", Data = df_OMV),
+      list(Name="SOCAR", Data = df_SOCAR)
     )
 
     # Return the results JSON
