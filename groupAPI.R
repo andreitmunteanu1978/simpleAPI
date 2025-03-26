@@ -17,7 +17,7 @@ library(base64enc)
     writeBin(base64decode(bin_file), temp_file)
 
     # Declare the relevant Excel sheets
-    sheets <- excel_sheets(filepath)
+    sheets <- excel_sheets(temp_file)
     sheets <- sheets[grepl("dws",tolower(sheets)) & grepl("-",tolower(sheets)) | grepl("omv",tolower(sheets)) | grepl("socar",tolower(sheets))]
 
     # Define a list to store the data frames
@@ -27,7 +27,7 @@ library(base64enc)
     # Import the Excel data into a data.frame
     for (d in names(df_list))
     {
-      df_temp <- cbind("ENTITY"=d, data.frame(read_excel(filepath, sheet = sheets[grepl(tolower(d), tolower(sheets))])))
+      df_temp <- cbind("ENTITY"=d, data.frame(read_excel(temp_file, sheet = sheets[grepl(tolower(d), tolower(sheets))])))
       df_temp <- df_temp[!is.na(df_temp$Data.expedierii),colnames(df_temp) %in% c("ENTITY","Data.expedierii","Produs","Cantitate.expediata.tone")]
       
       colnames(df_temp) <- c("ENTITY","DATE","PRODUCT","QUANTITY")
