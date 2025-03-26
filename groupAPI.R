@@ -8,7 +8,7 @@ library(base64enc)
 # Create all applicable functions for the API POST action
   
   # Declare the function for processing the Livrari Depozite.xlsx file
-  f_shipments_depots <- function(bin_file, ref_date, ref_range, category_file) {
+  f_shipments_depots <- function(bin_file, ref_date, ref_range) {
     
     # Create a temporary directory to store the file
     temp_file <- tempfile(fileext = ".xlsx")
@@ -301,7 +301,7 @@ function(req) {
   }
   
   switch(file_category,
-         "Shipments_Depots" = f_shipments_depots(file_binary, refDate, refRange, file_category),
+         "Shipments_Depots" = f_shipments_depots(file_binary, refDate, refRange),
          "Shipments_Vega" = f_shipments_vega(file_binary, refDate, refRange, file_category),
          "IPPA" = f_ippa(file_binary, refDate, refRange),
          "Jet" = f_jet(file_binary, refDate, refRange),
