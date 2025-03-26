@@ -51,13 +51,9 @@ library(base64enc)
     # Create the composite data.frame
     df <- do.call(rbind, df_list)
     aggregation_columns <- c("QUANTITY")
-
-    print(nrow(df))
     
     # Filter the data by latest +/- 10 days
     df <- df[format(as.Date(df$DATE),"%Y-%m-%d") %in% as.Date(ref_date+seq(-ref_range,ref_range)),]
-
-    print(nrow(df))
     
     # Create 3 response data.frames
     df_DWS <- df %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
@@ -74,12 +70,9 @@ library(base64enc)
         list(Name="SOCAR", Data = df_SOCAR)
         )
     )
-
-    print(length(DataList))
     
     # Return the results JSON
-    # return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
-    return(category_file, length(DataList))
+    return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
   }
     
   
