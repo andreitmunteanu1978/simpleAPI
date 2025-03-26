@@ -63,11 +63,12 @@ library(base64enc)
     # Define the array of group_by_columns
     group_by_colums <- colnames(df)[!colnames(df) %in% c(aggregation_columns,"ENTITY")]
     
+    # Store the data.frames into a list
     DataList <- list(Response = "Success",
       Info = list(
-        list(Name="DWS", Data = df_DWS),
-        list(Name="OMV", Data = df_OMV),
-        list(Name="SOCAR", Data = df_SOCAR)
+        list(Table = "DWS", Data = df_DWS, Groups = group_by_colums),
+        list(Table = "OMV", Data = df_OMV, Groups = group_by_colums),
+        list(Table = "SOCAR", Data = df_SOCAR, Groups = group_by_colums)
         )
     )
     
