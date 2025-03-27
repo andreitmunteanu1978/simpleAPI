@@ -425,8 +425,7 @@ equationText <- req$body$equation
 
 solution <- eval(parse(text = equationText))
 
-return(list("Result" = solution))
-
+return(solution)
 }
 
 #_______________________________________________________________
