@@ -29,7 +29,7 @@ library(base64enc)
     {
       if(c %in% c("Pid","Pname"))
       {df[,c] <- sapply(df[,c], as.character)} else
-      {df[,c] <- sapply(df[,c], function(x) {ifelse(is.na(x),0,as.numeric(x))})}
+      {df[,c] <- sapply(df[,c], function(x) {ifelse(is.na(x),0,round(as.numeric(x),2))})}
     }
 
     # Delete the temporary file
