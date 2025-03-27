@@ -6,7 +6,45 @@ library(jsonlite)
 library(base64enc)
 
 # Create all applicable functions for the API POST action
-  
+  f_realizari <- function(bin_file, ref_date, ref_range) {
+    
+    # Create a temporary directory to store the file
+    temp_file <- tempfile(fileext = ".xlsx")
+    
+    # Save the file
+    writeBin(base64decode(bin_file), temp_file)
+
+    # Declare the relevant Excel sheets
+    sheets <- excel_sheets(temp_file)
+    sheets <- sheets[grepl("ziua",tolower(sheets))]
+
+    # Import the data.frame and rename columns
+    df <- data.frame(read_excel(temp_file, sheet = sheets))
+    df <- df[,c(1,2,3,5,8,11,12,13,14)]
+    colnames(df) <- c("Pid","Pname","Stock","Dprod","Cprod","Dflows","Cflows","Tstock","Pstock")
+    df <- df[!is.na(df$Pid),]
+
+    # Format all column names
+    for (c in colnames(df))
+    {
+      if(c %in% c("Pid","Pname"))
+      {df[,c] <- sapply(df[,c], as.character)} else
+      {df[,c] <- sapply(df[,c], function(x) {ifelse(is.na(x),0,as.numeric(x))})}
+    }
+
+    # Delete the temporary file
+    unlink(temp_file)
+
+    # Store the data.frames into a list
+    DataList <- list(Response = "Success",
+      Info = list(
+        list(Table = "Realizari", Data = df, Groups = "NA")
+        )
+    )
+    
+    # Return the results JSON
+    return(fromJSON(toJSON(DataList, pretty=TRUE, auto_unbox = TRUE)))
+    }
   # Declare the function for processing the Livrari Depozite.xlsx file
   f_shipments_depots <- function(bin_file, ref_date, ref_range) {
     
@@ -309,6 +347,7 @@ function(req) {
          "Trains_Barges" = f_trains_barges(file_binary, refDate, refRange, file_category),
          "Shipments_Others" = f_shipments_others(file_binary, refDate, refRange, file_category),
          "Stocks" = f_stocks(file_binary, refDate, refRange, file_category),
+         "Realizari" = f_realizari(file_binary, refDate, refRange)
   )
 }
 
