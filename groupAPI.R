@@ -22,12 +22,13 @@ library(base64enc)
     df <- data.frame(read_excel(temp_file, sheet = sheets))
     df <- df[,c(1,2,3,5,8,11,12,13,14)]
     colnames(df) <- c("1_Id","2_Name","3_Stock","4_dProd","5_cProd","6_dFlows","7_cFlows","8_tStock","9_pStock")
-    df <- df[!is.na(df$1_Id),]
+    df[!is.na(df[which(colnames(df)=="1_Id")]),]
+    # df <- df[!is.na(df$1_Id),]
 
     # Format all column names
     for (c in colnames(df))
     {
-      if(c %in% c(1_Id","2_Name"))
+      if(c %in% c("1_Id","2_Name"))
       {df[,c] <- sapply(df[,c], as.character)} else
       {df[,c] <- sapply(df[,c], function(x) {ifelse(is.na(x),0,round(as.numeric(x),2))})}
     }
