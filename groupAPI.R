@@ -416,6 +416,21 @@ function(req) {
 
 #_______________________________________________________________
 
+#* @post calculator
+#* @serializer json
+function(req) {
+
+# Store the equation as a text string
+equationText <- req$body$equation
+
+solution <- eval(parse(text = equationText))
+
+return(solution)
+
+}
+
+#_______________________________________________________________
+
 #* @post schema
 #* @param File:file
 #* @serializer json
