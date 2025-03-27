@@ -19,11 +19,10 @@ library(base64enc)
     sheets <- sheets[grepl("ziua",tolower(sheets))]
 
     # Import the data.frame and rename columns
-    df <- data.frame(read_excel(temp_file, sheet = sheets))
+    df <- data.frame(read_excel(filepath, sheet = sheets))
     df <- df[,c(1,2,3,5,8,11,12,13,14)]
     colnames(df) <- c("1_Id","2_Name","3_Stock","4_dProd","5_cProd","6_dFlows","7_cFlows","8_tStock","9_pStock")
-    df[!is.na(df[which(colnames(df)=="1_Id")]),]
-    # df <- df[!is.na(df$1_Id),]
+    df <- df[!is.na(df[which(colnames(df)=="1_Id")]),]
 
     # Format all column names
     for (c in colnames(df))
@@ -33,7 +32,7 @@ library(base64enc)
       {df[,c] <- sapply(df[,c], function(x) {ifelse(is.na(x),0,round(as.numeric(x),2))})}
     }
 
-    # Append input Grouping column
+    # Append 'Grouping' column for users' selection input
     df <- cbind("0_Group"="", df)
 
     # Delete the temporary file
