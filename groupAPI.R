@@ -19,7 +19,7 @@ library(base64enc)
     sheets <- sheets[grepl("ziua",tolower(sheets))]
 
     # Import the data.frame and rename columns
-    df <- data.frame(read_excel(filepath, sheet = sheets))
+    df <- data.frame(read_excel(temp_file, sheet = sheets))
     df <- df[,c(1,2,3,5,8,11,12,13,14)]
     colnames(df) <- c("1_Id","2_Name","3_Stock","4_dProd","5_cProd","6_dFlows","7_cFlows","8_tStock","9_pStock")
     df <- df[!is.na(df[which(colnames(df)=="1_Id")]),]
