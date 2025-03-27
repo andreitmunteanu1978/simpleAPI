@@ -98,8 +98,11 @@ library(base64enc)
     
     # Create 3 response data.frames
     df_DWS <- df[df$ENTITY=="DWS",] %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns,"ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+    df_DWS <- cbind("0_Select"="",df_DWS)
     df_OMV <- df[df$ENTITY=="OMV",] %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns, "ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+    df_OMV <- cbind("0_Select"="",df_OMV)
     df_SOCAR <- df[df$ENTITY=="SOCAR",] %>% group_by(across(all_of(colnames(df)[!colnames(df) %in% c(aggregation_columns, "ENTITY")]))) %>% summarise(across(all_of(aggregation_columns), sum, na.rm = TRUE), .groups = "drop")
+    df_SOCAR <- cbind("0_Select"="",df_SOCAR)
     
     # Define the array of group_by_columns
     group_by_colums <- colnames(df)[!colnames(df) %in% c(aggregation_columns,"ENTITY")]
